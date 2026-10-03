@@ -272,7 +272,7 @@ def build_calendario(ctx):
             midx = f'(YEAR(Cfg_Hoje)*12+MONTH(Cfg_Hoje)+{mo})'
             f = f'({midx}-IF(INDEX(Cartoes_Venc,{k})>INDEX(Cartoes_Fech,{k}),0,1))'
             sh.put(f'L{r}', f'=IF(INDEX(Cartoes_Nome,{k})="","",INDEX(Cartoes_Nome,{k}))', 'calc')
-            sh.put(f'M{r}', f'=IF(L{r}="","",DATE(INT(({midx}-1)/12),MOD({midx}-1,12)+1,INDEX(Cartoes_Venc,{k})))', 'calc', DATA)
+            sh.put(f'M{r}', f'=IF(L{r}="","",DATE(INT(({midx}-1)/12),MOD({midx}-1,12)+1,MIN(INDEX(Cartoes_Venc,{k}),DAY(DATE(INT(({midx}-1)/12),MOD({midx}-1,12)+2,0)))))', 'calc', DATA)
             sh.put(f'N{r}', f'=IF(L{r}="",0,IF(SUMIFS(L_VParc,L_Tipo,"Transferência",L_Status,"Pago",L_Desc,"*"&L{r}&"*",L_IIni,{midx})<0,0,{fat(f"L{r}", f)}))', 'calc', BRL)
     f_last = rr + 24 - 1
     ctx.name('CalF_Data', S, f'M{rr}:M{f_last}')
@@ -373,7 +373,7 @@ def build_calendario(ctx):
         r = fat0 + k
         f = f'(Sel_Idx-IF(INDEX(Cartoes_Venc,{k})>INDEX(Cartoes_Fech,{k}),0,1))'
         sh.put(f'B{r}', f'=IF(INDEX(Cartoes_Nome,{k})="","",INDEX(Cartoes_Nome,{k}))', 'calc')
-        sh.put(f'C{r}', f'=IF(B{r}="","",INDEX(Cartoes_Venc,{k}))', 'calc', INT, h='center')
+        sh.put(f'C{r}', f'=IF(B{r}="","",MIN(INDEX(Cartoes_Venc,{k}),Sel_Dias))', 'calc', INT, h='center')
         sh.put(f'D{r}', f'=IF(B{r}="",0,{fat(f"B{r}", f)})', 'calc', BRL)
         sh.put(f'G{r}', f'=IF(OR(B{r}="",D{r}=0),0,IF(SUMIFS(L_VParc,L_Tipo,"Transferência",L_Status,"Pago",L_Desc,"*"&B{r}&"*",L_IIni,Sel_Idx)<0,1,0))', 'calc', INT, size=8, color=COR['mudo'])
         sh.put(f'F{r}', f'=IF(G{r}=1,0,D{r})', 'calc', BRL)

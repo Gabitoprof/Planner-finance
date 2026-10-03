@@ -178,8 +178,8 @@ def build_config(ctx):
                         N_CART, {0: 'Cartoes_Nome', 1: 'Cartoes_Limite', 2: 'Cartoes_Fech', 3: 'Cartoes_Venc'},
                         {1: BRLZ, 2: INT, 3: INT},
                         note='Compras a partir do dia de fechamento entram na fatura seguinte.')
-    sh.dv(f'D{r0c}:E{r1c}', '1', kind='whole', operator='greaterThanOrEqual', msg='Informe um dia de 1 a 28.')
-    ws.data_validations.dataValidation[-1].formula2 = '28'
+    sh.dv(f'D{r0c}:E{r1c}', '1', kind='whole', operator='greaterThanOrEqual', msg='Informe um dia de 1 a 31.')
+    ws.data_validations.dataValidation[-1].formula2 = '31'
     ws.data_validations.dataValidation[-1].operator = 'between'
     ctx.sample_ranges['cartoes'] = (r0c, r1c)
 

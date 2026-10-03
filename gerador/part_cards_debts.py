@@ -15,7 +15,8 @@ def fat(card, f, extra=''):
 def venc(card_k, f_expr):
     """data de vencimento da fatura de índice f (card_k = posição do cartão)."""
     vi = f'(({f_expr})+IF(INDEX(Cartoes_Venc,{card_k})>INDEX(Cartoes_Fech,{card_k}),0,1))'
-    return f'DATE(INT(({vi}-1)/12),MOD({vi}-1,12)+1,INDEX(Cartoes_Venc,{card_k}))'
+    y, m = f'INT(({vi}-1)/12)', f'MOD({vi}-1,12)+1'
+    return f'DATE({y},{m},MIN(INDEX(Cartoes_Venc,{card_k}),DAY(DATE({y},{m}+1,0))))'
 
 
 def build_cartoes(ctx):
